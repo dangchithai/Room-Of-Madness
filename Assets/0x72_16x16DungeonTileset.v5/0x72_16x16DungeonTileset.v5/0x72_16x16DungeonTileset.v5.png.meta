@@ -4413,7 +4413,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 0x72_16x16DungeonTileset.v5_218
+      name: Bat
       rect:
         serializedVersion: 2
         x: 64
@@ -6604,7 +6604,6 @@ TextureImporter:
       0x72_16x16DungeonTileset.v5_182: -7035707
       0x72_16x16DungeonTileset.v5_126: -578228562
       Edge_2: 1270956226
-      0x72_16x16DungeonTileset.v5_218: 725303721
       0x72_16x16DungeonTileset.v5_299: -1581267350
       Wall_9: 967691561
       0x72_16x16DungeonTileset.v5_191: 2145671312
@@ -6708,6 +6707,7 @@ TextureImporter:
       CloseDoor_1: 2088140015
       0x72_16x16DungeonTileset.v5_82: 184951669
       0x72_16x16DungeonTileset.v5_197: 1266077949
+      Bat: 725303721
       Wall_12: -522447996
       0x72_16x16DungeonTileset.v5_15: 92505668
       0x72_16x16DungeonTileset.v5_35: -1513020190

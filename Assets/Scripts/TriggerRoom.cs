@@ -54,6 +54,7 @@ public class TriggerRoom : Collidable
         if(hit.gameObject.tag == "Player")
         {
             float valueRand = Random.value;
+            //float valueRand = 0.66f;
             if (valueRand > 0.999f) // 0.001%
             {
                 currentRoomMode = RoomMode.LegendaryReward;
@@ -81,6 +82,18 @@ public class TriggerRoom : Collidable
                         Instantiate(monsters[i], spawnMonsterLocations[i]);
                     }
                     break;
+                case RoomMode.Reward:
+                    OnFinishTriggerRoom();
+                    break;
+                case RoomMode.LegendaryReward:
+                    OnFinishTriggerRoom();
+                    break;
+                case RoomMode.Puzzle:
+                    int randomTrap = Random.Range(0, GameManager.Instance.TrapList.Length);
+                    Instantiate(GameManager.Instance.TrapList[randomTrap], this.gameObject.transform);
+                    OnFinishTriggerRoom();
+                    break;
+                
             }
 
             isTriggerCreationRoom = true;

@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public TriggerRoom ActiveRoom;
+    public GameObject[] TrapList;
+    [HideInInspector] public TriggerRoom ActiveRoom;
 
     // Start is called before the first frame update
     void Start()

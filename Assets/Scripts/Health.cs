@@ -9,23 +9,23 @@ public class Health : MonoBehaviour
     [SerializeField] protected float immuneDuration = 0.5f;
     private float currentImmuneTime;
 
-    private bool isDead = false;
+    public bool IsDead = false;
 
-    public void GetHit(int dmg, GameObject sender)
+    public bool GetHit(int dmg, GameObject sender)
     {
-        if (isDead)
+        if (IsDead)
         {
-            return;
+            return false;
         }
 
         if (sender.CompareTag(this.gameObject.tag))
         {
-            return;
+            return false;
         }
 
         if (Time.time - currentImmuneTime < immuneDuration)
         {
-            return;
+            return false;
         }
 
         currentImmuneTime = Time.time;
@@ -39,9 +39,20 @@ public class Health : MonoBehaviour
         }
         else
         {
-            isDead = true;
+            IsDead = true;
             Death();
             Debug.Log(this.name + " Dealth ");
+        }
+
+        return true;
+    }
+
+    public void LifeSteal(int amount)
+    {
+        currentHealth += amount;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
         }
     }
 

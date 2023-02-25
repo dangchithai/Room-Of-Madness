@@ -158,5 +158,5 @@ MonoBehaviour:
   BlockingLayer:
     serializedVersion: 2
     m_Bits: 192
-  xSpeed: 0.5
-  ySpeed: 0.5
+  xSpeed: 0.8
+  ySpeed: 0.9

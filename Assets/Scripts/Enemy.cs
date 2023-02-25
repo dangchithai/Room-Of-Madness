@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : Health
 {
     [SerializeField] private int dmgCollide = 5;
+    [SerializeField] private int lifeSteal = 0;
     private SpriteRenderer sprite;
     private BoxCollider2D boxCollider;
     private Transform playerTransform;
@@ -45,7 +46,10 @@ public class Enemy : Health
             if (hits[i].gameObject.tag == "Player")
             {
                 collidingWithPlayer = true;
-                hits[i].gameObject.GetComponent<Health>().GetHit(dmgCollide, this.gameObject);
+                if (hits[i].gameObject.GetComponent<Health>().GetHit(dmgCollide, this.gameObject))
+                {
+                    this.LifeSteal(lifeSteal);
+                }
             }
 
             hits[i] = null;
@@ -54,7 +58,11 @@ public class Enemy : Health
 
     protected override void Death()
     {
-        GameManager.Instance.ActiveRoom.NumberOfMonsterAlive--;
+        if (GameManager.Instance.ActiveRoom != null)
+        {
+            GameManager.Instance.ActiveRoom.NumberOfMonsterAlive--;
+        }
+
         Destroy(this.gameObject);
     }
 
