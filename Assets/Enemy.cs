@@ -49,11 +49,12 @@ public class Enemy : Health
             }
 
             hits[i] = null;
-        } 
+        }
     }
 
     protected override void Death()
     {
+        GameManager.Instance.ActiveRoom.NumberOfMonsterAlive--;
         Destroy(this.gameObject);
     }
 
