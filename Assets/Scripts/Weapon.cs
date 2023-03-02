@@ -18,6 +18,7 @@ public class Weapon : Collidable
                 if (hit.gameObject.tag == "Enemy")
                 {
                     Vector3 direction = hit.transform.position - this.transform.position;
+                    BoxCollider2D boxCollider = hit.gameObject.GetComponent<BoxCollider2D>();
                     this.gameObject.GetComponent<Knockback>()?.ApplyKnockback(hit.gameObject, direction, knockbackForce, 0.3f);
                 }
             }

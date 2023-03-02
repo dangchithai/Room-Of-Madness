@@ -13,14 +13,55 @@ public class Knockback : MonoBehaviour
     private IEnumerator KnockbackCoroutine(GameObject target, Vector3 direction, float length, float overTime)
     {
         float timeLeft = overTime;
+
         while (timeLeft > 0)
         {
             if (!target.IsNullOrDestroyed())
             {
+                var hitY = Physics2D.BoxCast(
+                                    target.transform.position, 
+                                    target.GetComponent<BoxCollider2D>().size, 
+                                    0, 
+                                    new Vector2(0, direction.y), 
+                                    Mathf.Abs(direction.y * Time.deltaTime / overTime * length), 
+                                    target.GetComponent<Mover>().BlockingLayer);
+
+                var hitX = Physics2D.BoxCast(
+                                    target.transform.position,
+                                    target.GetComponent<BoxCollider2D>().size,
+                                    0,
+                                    new Vector2(direction.x, 0),
+                                    Mathf.Abs(direction.x * Time.deltaTime / overTime * length),
+                                    target.GetComponent<Mover>().BlockingLayer);
+
                 if (timeLeft > Time.deltaTime)
-                    target.transform.Translate(direction * Time.deltaTime / overTime * length);
+                {
+                    if (hitY.collider == null)
+                    {
+                        target.transform.Translate(new Vector3(0, direction.y * Time.deltaTime / overTime * length, 0));
+                    }
+
+                    if (hitX.collider == null)
+                    {
+                        target.transform.Translate(new Vector3(direction.x * Time.deltaTime / overTime * length, 0, 0));
+                    }
+
+                    ////target.transform.Translate(direction * Time.deltaTime / overTime * length);
+                }
                 else
-                    target.transform.Translate(direction * timeLeft / overTime * length);
+                {
+                    if (hitY.collider == null)
+                    {
+                        target.transform.Translate(new Vector3(0, direction.y * timeLeft / overTime * length, 0));
+                    }
+
+                    if (hitX.collider == null)
+                    {
+                        target.transform.Translate(new Vector3(direction.x * timeLeft / overTime * length, 0, 0));
+                    }
+                    ////target.transform.Translate(direction * timeLeft / overTime * length);
+                }
+
                 timeLeft -= Time.deltaTime;
             }
 

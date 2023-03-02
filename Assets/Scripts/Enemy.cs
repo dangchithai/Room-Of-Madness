@@ -4,32 +4,60 @@ using UnityEngine;
 
 public class Enemy : Health
 {
-    [SerializeField] private int dmgCollide = 5;
+    public int DmgCollide = 5;
     [SerializeField] private int lifeSteal = 0;
+    [SerializeField] private float knockbackForce = 3f;
+    [SerializeField] private SkillScriptableObject[] skills;
     private SpriteRenderer sprite;
     private BoxCollider2D boxCollider;
-    private Transform playerTransform;
-    private Mover mover;
+    private Player player;
+    private Color baseColor;
+    public Mover Mover;
 
     bool collidingWithPlayer = false;
-    private Collider2D[] hits = new Collider2D[10];
+    private Collider2D[] hits = new Collider2D[5];
     [SerializeField] private ContactFilter2D contactFilter;
+    private List<SkillScriptableObject> ourSkills;
 
     // Start is called before the first frame update
     void Start()
     {
         sprite = this.GetComponent<SpriteRenderer>();
-        playerTransform = FindObjectOfType<Player>().transform;
-        mover = this.GetComponent<Mover>();
+        player = FindObjectOfType<Player>();
+        Mover = this.GetComponent<Mover>();
         boxCollider = this.GetComponent<BoxCollider2D>();
+
+        ourSkills = new List<SkillScriptableObject>();
+        for (int i = 0; i < skills.Length; i++)
+        {
+            var newOurSkill = Instantiate(skills[i]);
+            ourSkills.Add(newOurSkill);
+        }
+
+        baseColor = sprite.color;
     }
 
     // Update is called once per frame
     void Update()
     {
+        for (int i = 0; i < ourSkills.Count; i++)
+        {
+            if (ourSkills[i].CanUseSkill(this, player))
+            {
+                ourSkills[i].UseSkill(this, player);
+            }
+        }
+
         if (!collidingWithPlayer)
         {
-            mover.UpdateMotor((playerTransform.position - this.transform.position).normalized);
+            if (Mover.CurrentState == Mover.State.Moving)
+            {
+                Mover.UpdateMotor((player.transform.position - this.transform.position).normalized);
+            }
+            else
+            {
+                Mover.Charge();
+            }
         }
 
         collidingWithPlayer = false;
@@ -46,9 +74,16 @@ public class Enemy : Health
             if (hits[i].gameObject.tag == "Player")
             {
                 collidingWithPlayer = true;
-                if (hits[i].gameObject.GetComponent<Health>().GetHit(dmgCollide, this.gameObject))
+                if (hits[i].gameObject.GetComponent<Health>().GetHit(DmgCollide, this.gameObject))
                 {
                     this.LifeSteal(lifeSteal);
+
+                    if (Mover.CurrentState == Mover.State.Charging)
+                    {
+                        Vector3 direction = hits[i].transform.position - this.transform.position;
+                        this.GetComponent<Knockback>().ApplyKnockback(hits[i].gameObject, direction, knockbackForce, 0.3f);
+                        Mover.StopCharging = true;
+                    }
                 }
             }
 
@@ -68,9 +103,8 @@ public class Enemy : Health
 
     protected override IEnumerator GetHitAnimation()
     {
-        Color baseColor = sprite.color;
         sprite.color = Color.red;
-        yield return new WaitForSeconds(immuneDuration);
+        yield return new WaitForSeconds(immuneDuration - 0.1f);
         sprite.color = baseColor;
     }
 }

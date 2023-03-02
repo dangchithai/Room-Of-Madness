@@ -128,8 +128,11 @@ MonoBehaviour:
   currentHealth: 15
   maxHealth: 15
   immuneDuration: 0.5
-  dmgCollide: 3
+  IsDead: 0
+  DmgCollide: 5
   lifeSteal: 1
+  skills: []
+  Mover: {fileID: 0}
   contactFilter:
     useTriggers: 0
     useLayerMask: 0
@@ -159,5 +162,5 @@ MonoBehaviour:
   BlockingLayer:
     serializedVersion: 2
     m_Bits: 192
-  xSpeed: 1.2
-  ySpeed: 1.5
+  xSpeed: 0.8
+  ySpeed: 1
